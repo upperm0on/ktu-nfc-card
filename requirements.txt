@@ -6,3 +6,5 @@ daphne
 channels_redis
 dj-database-url
 psycopg2-binary
+whitenoise[brotli]
+gunicorn

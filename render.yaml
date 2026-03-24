@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: ktu-nfc-backend
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "python manage.py migrate && daphne -b 0.0.0.0 -p $PORT config.asgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ktu-nfc-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ktu-nfc-redis
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: CORS_ALLOW_ALL_ORIGINS
+        value: "False"
+
+  - type: web
+    name: ktu-nfc-frontend
+    runtime: static
+    buildCommand: "cd frontend && npm ci && npm run build"
+    publishPath: "frontend/dist"
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ktu-nfc-backend
+          property: url
+
+  - type: redis
+    name: ktu-nfc-redis
+    plan: free
+    ipAllowList: []
+
+databases:
+  - name: ktu-nfc-db
+    plan: free
