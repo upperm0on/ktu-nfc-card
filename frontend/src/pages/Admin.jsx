@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Settings, History, CheckCircle, XCircle, ChevronRight, Clock, Users, ArrowLeft, ToggleLeft, ToggleRight, LayoutGrid } from 'lucide-react';
+import { API_BASE_URL } from '../config/api';
 
 export default function Admin() {
     const navigate = useNavigate();
@@ -17,8 +18,8 @@ export default function Admin() {
         setLoading(true);
         try {
             const [modeRes, sessionsRes] = await Promise.all([
-                fetch(`${import.meta.env.VITE_API_URL || ''}/api/mode/`),
-                fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/`)
+                fetch(`${API_BASE_URL}/api/mode/`),
+                fetch(`${API_BASE_URL}/api/sessions/`)
             ]);
             if (modeRes.ok) {
                 const modeData = await modeRes.json();
@@ -38,7 +39,7 @@ export default function Admin() {
     const toggleMode = async () => {
         const newMode = mode === 'exam' ? 'non_exam' : 'exam';
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/mode/`, {
+            const res = await fetch(`${API_BASE_URL}/api/mode/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: newMode })
@@ -53,7 +54,7 @@ export default function Admin() {
 
     const viewLogs = async (session) => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/${session.session_key}/verifications/`);
+            const res = await fetch(`${API_BASE_URL}/api/sessions/${session.session_key}/verifications/`);
             if (res.ok) {
                 const data = await res.json();
                 setSelectedSessionLogs({

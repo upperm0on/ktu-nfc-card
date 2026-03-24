@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, LayoutDashboard, QrCode, Play, Square, CheckCircle, ShieldCheck, Download, Clock, Activity, LogOut } from 'lucide-react';
+import { API_BASE_URL, WS_BASE_URL } from '../config/api';
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function Dashboard() {
     const toggleMode = async () => {
         const newMode = mode === 'exam' ? 'non_exam' : 'exam';
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/mode/`, {
+            const res = await fetch(`${API_BASE_URL}/api/mode/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mode: newMode })
@@ -60,8 +61,8 @@ export default function Dashboard() {
     const fetchInitialData = async () => {
         try {
             const [modeRes, sessionsRes] = await Promise.all([
-                fetch(`${import.meta.env.VITE_API_URL || ''}/api/mode/`),
-                fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/active/`)
+                fetch(`${API_BASE_URL}/api/mode/`),
+                fetch(`${API_BASE_URL}/api/sessions/active/`)
             ]);
 
             if (modeRes.ok) {
@@ -82,7 +83,7 @@ export default function Dashboard() {
 
     const fetchVerifications = async (key) => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/${key}/verifications/`);
+            const res = await fetch(`${API_BASE_URL}/api/sessions/${key}/verifications/`);
             if (res.ok) {
                 const data = await res.json();
                 setVerifiedStudents(data);
@@ -100,9 +101,7 @@ export default function Dashboard() {
     };
 
     const connectWebSocket = (sessionKey) => {
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsHost = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}`;
-        ws.current = new WebSocket(`${wsHost}/ws/session/${sessionKey}/`);
+        ws.current = new WebSocket(`${WS_BASE_URL}/ws/session/${sessionKey}/`);
 
         ws.current.onopen = () => setWsStatus('connected');
         ws.current.onclose = () => setWsStatus('disconnected');
@@ -123,7 +122,7 @@ export default function Dashboard() {
         e.preventDefault();
         setIsCreating(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/create/`, {
+            const res = await fetch(`${API_BASE_URL}/api/sessions/create/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -151,7 +150,7 @@ export default function Dashboard() {
 
         setIsEnding(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/${activeSession.session_key}/close/`, {
+            const res = await fetch(`${API_BASE_URL}/api/sessions/${activeSession.session_key}/close/`, {
                 method: 'POST'
             });
             if (res.ok) {

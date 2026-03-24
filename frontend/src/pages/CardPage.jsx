@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CheckCircle, AlertCircle, User, Building, UserCheck, ShieldCheck, ChevronRight } from 'lucide-react';
+import { API_BASE_URL, WS_BASE_URL } from '../config/api';
 
 export default function CardPage() {
     const [searchParams] = useSearchParams();
@@ -33,12 +34,12 @@ export default function CardPage() {
     const initPage = async () => {
         setLoading(true);
         try {
-            const modeRes = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/mode/`);
+            const modeRes = await fetch(`${API_BASE_URL}/api/mode/`);
             if (!modeRes.ok) throw new Error("Failed to fetch system mode.");
             const modeData = await modeRes.json();
             setMode(modeData.mode);
 
-            const studentRes = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/student/${studentId}/`);
+            const studentRes = await fetch(`${API_BASE_URL}/api/student/${studentId}/`);
             if (!studentRes.ok) {
                 if (studentRes.status === 404) throw new Error(`Student ID ${studentId} not found in the records.`);
                 throw new Error("Unable to retrieve student profile.");
@@ -49,11 +50,11 @@ export default function CardPage() {
             if (modeData.mode === 'exam') {
                 let currentSession = null;
                 if (sessionKey) {
-                    const sessionRes = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/${sessionKey}/`);
+                    const sessionRes = await fetch(`${API_BASE_URL}/api/sessions/${sessionKey}/`);
                     if (sessionRes.ok) currentSession = await sessionRes.json();
                 }
                 if (!currentSession) {
-                    const activeRes = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/sessions/active/`);
+                    const activeRes = await fetch(`${API_BASE_URL}/api/sessions/active/`);
                     if (!activeRes.ok) throw new Error("No exams are currently active in this session.");
                     currentSession = await activeRes.json();
                 }
@@ -69,9 +70,7 @@ export default function CardPage() {
     };
 
     const connectWebSocket = (key) => {
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsHost = import.meta.env.VITE_WS_URL || `${protocol}//${window.location.host}`;
-        ws.current = new WebSocket(`${wsHost}/ws/session/${key}/`);
+        ws.current = new WebSocket(`${WS_BASE_URL}/ws/session/${key}/`);
         ws.current.onopen = () => setWsStatus('connected');
         ws.current.onclose = () => setWsStatus('disconnected');
         ws.current.onmessage = (event) => {
