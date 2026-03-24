@@ -1,0 +1,57 @@
+[
+    {
+        "student_id": "STU001",
+        "full_name": "Kwame Asante",
+        "photo_url": "",
+        "programme": "BSc. Computer Science",
+        "department": "Computer Science",
+        "level": "400",
+        "academic_year": "2025/2026",
+        "semester": "Second Semester",
+        "enrollment_status": "Active"
+    },
+    {
+        "student_id": "STU002",
+        "full_name": "Ama Serwaa Mensah",
+        "photo_url": "",
+        "programme": "BSc. Information Technology",
+        "department": "Information Technology",
+        "level": "300",
+        "academic_year": "2025/2026",
+        "semester": "Second Semester",
+        "enrollment_status": "Active"
+    },
+    {
+        "student_id": "STU003",
+        "full_name": "Yaw Boateng",
+        "photo_url": "",
+        "programme": "BSc. Electrical Engineering",
+        "department": "Electrical & Electronic Engineering",
+        "level": "200",
+        "academic_year": "2025/2026",
+        "semester": "Second Semester",
+        "enrollment_status": "Active"
+    },
+    {
+        "student_id": "STU004",
+        "full_name": "Efua Appiah",
+        "photo_url": "",
+        "programme": "BSc. Mechanical Engineering",
+        "department": "Mechanical Engineering",
+        "level": "100",
+        "academic_year": "2025/2026",
+        "semester": "Second Semester",
+        "enrollment_status": "Active"
+    },
+    {
+        "student_id": "SRC001",
+        "full_name": "SRC President",
+        "photo_url": "",
+        "programme": "BSc. Computer Science",
+        "department": "Computer Science",
+        "level": "400",
+        "academic_year": "2025/2026",
+        "semester": "Second Semester",
+        "enrollment_status": "Active"
+    }
+]
